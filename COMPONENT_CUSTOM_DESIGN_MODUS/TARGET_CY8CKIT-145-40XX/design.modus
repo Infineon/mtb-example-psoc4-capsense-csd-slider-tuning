@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Design version="12" device_library_hint_path="../../../../Documents/mtb_shared/mtb-pdl-cat2/latest-v1.X/devicesupport.xml" xmlns="http://cypress.com/xsd/cydesignfile_v3">
-    <ToolInfo version="2.2.0.2801"/>
+<Design version="12" device_library_hint_path="../../../../solution-demo/mtb_shared/mtb-pdl-cat2/latest-v1.X/devicesupport.xml" xmlns="http://cypress.com/xsd/cydesignfile_v3">
+    <ToolInfo version="2.4.0.5880"/>
     <Devices>
         <Device mpn="CY8C4045AZI-S413">
             <BlockConfig>
@@ -210,10 +210,36 @@
                 <Block location="ioss[0].port[3].pin[0]">
                     <Alias value="CYBSP_DEBUG_UART_RX"/>
                     <Alias value="CYBSP_UART_RX"/>
+                    <Personality template="m0s8pin" version="1.0">
+                        <Param id="DriveModes" value="CY_GPIO_DM_ANALOG"/>
+                        <Param id="initialState" value="1"/>
+                        <Param id="vtrip" value="CY_GPIO_VTRIP_CMOS"/>
+                        <Param id="sioInputBuffer" value="true"/>
+                        <Param id="isrTrigger" value="CY_GPIO_INTR_DISABLE"/>
+                        <Param id="slewRate" value="CY_GPIO_SLEW_FAST"/>
+                        <Param id="sioOutputBuffer" value="false"/>
+                        <Param id="sioRef" value="CY_SIO_VREF_PINREF"/>
+                        <Param id="sioTrip" value=""/>
+                        <Param id="sioVoltage" value="CY_SIO_VOH_1_00"/>
+                        <Param id="inFlash" value="true"/>
+                    </Personality>
                 </Block>
                 <Block location="ioss[0].port[3].pin[1]">
                     <Alias value="CYBSP_DEBUG_UART_TX"/>
                     <Alias value="CYBSP_UART_TX"/>
+                    <Personality template="m0s8pin" version="1.0">
+                        <Param id="DriveModes" value="CY_GPIO_DM_ANALOG"/>
+                        <Param id="initialState" value="1"/>
+                        <Param id="vtrip" value="CY_GPIO_VTRIP_CMOS"/>
+                        <Param id="sioInputBuffer" value="true"/>
+                        <Param id="isrTrigger" value="CY_GPIO_INTR_DISABLE"/>
+                        <Param id="slewRate" value="CY_GPIO_SLEW_FAST"/>
+                        <Param id="sioOutputBuffer" value="false"/>
+                        <Param id="sioRef" value="CY_SIO_VREF_PINREF"/>
+                        <Param id="sioTrip" value=""/>
+                        <Param id="sioVoltage" value="CY_SIO_VOH_1_00"/>
+                        <Param id="inFlash" value="true"/>
+                    </Personality>
                 </Block>
                 <Block location="ioss[0].port[3].pin[2]">
                     <Alias value="CYBSP_SWDIO"/>
@@ -336,6 +362,14 @@
                 <Block location="srss[0].clock[0].sysclk[0]">
                     <Personality template="m0s8sysclk" version="1.0">
                         <Param id="divider" value="1"/>
+                    </Personality>
+                </Block>
+                <Block location="srss[0].power[0]">
+                    <Personality template="m0s8power" version="1.0">
+                        <Param id="idlePwrMode" value="CY_CFG_PWR_MODE_DEEPSLEEP"/>
+                        <Param id="deepsleepLatency" value="0"/>
+                        <Param id="vddaMv" value="5000"/>
+                        <Param id="vdddMv" value="5000"/>
                     </Personality>
                 </Block>
             </BlockConfig>
