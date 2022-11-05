@@ -8,7 +8,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2021, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2022, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -62,8 +62,8 @@
 /*******************************************************************************
 * Function Prototypes
 *******************************************************************************/
-static cy_status initialize_capsense(void);
-static cy_status initialize_ezi2c(void);
+static cy_capsense_status_t initialize_capsense(void);
+static cy_en_scb_ezi2c_status_t initialize_ezi2c(void);
 static void capsense_isr(void);
 static void ezi2c_isr(void);
 
@@ -96,7 +96,7 @@ cy_en_capsense_bist_status_t measure_status[NUMBER_OF_SLIDER_SEGMENTS];
 *******************************************************************************/
 int main(void)
 {
-    cy_status status = CYRET_SUCCESS;
+    uint32_t status;
     cy_rslt_t result = CY_RSLT_SUCCESS;
     
     /* Initialize the device and board peripherals */
@@ -112,13 +112,13 @@ int main(void)
     status = initialize_ezi2c();
 
     /* Halt the CPU if EZI2C initialization failed */
-    CY_ASSERT(CYRET_SUCCESS == status);
+    CY_ASSERT(CY_SCB_EZI2C_SUCCESS == status);
     
     /* Initialize CapSense */
     status = initialize_capsense();
 
     /* Halt the CPU if CapSense initialization failed */
-    CY_ASSERT(CY_RET_SUCCESS == status);
+    CY_ASSERT(CY_CAPSENSE_STATUS_SUCCESS == status);
     
     /* To avoid compiler warning*/
     (void) result;
@@ -161,9 +161,9 @@ int main(void)
 *  CapSense initiliazition status
 *
 *******************************************************************************/
-static cy_status initialize_capsense(void)
+static cy_capsense_status_t initialize_capsense(void)
 {
-    cy_status status = CYRET_SUCCESS;
+    cy_capsense_status_t status = CY_CAPSENSE_STATUS_SUCCESS;
     
     /* CapSense interrupt configuration */
     const cy_stc_sysint_t CapSense_interrupt_config =
@@ -175,13 +175,11 @@ static cy_status initialize_capsense(void)
     /* Capture the CSD HW block and initialize it to the default state. */
     status = Cy_CapSense_Init(&cy_capsense_context);
     
-    if (CYRET_SUCCESS == status)
+    if (CY_CAPSENSE_STATUS_SUCCESS == status)
     {
 
         /* Initialize CapSense interrupt */
-        status = Cy_SysInt_Init(&CapSense_interrupt_config, capsense_isr);
-
-        if (CYRET_SUCCESS == status)
+        if (CY_SYSINT_SUCCESS == Cy_SysInt_Init(&CapSense_interrupt_config, capsense_isr))
         {
             NVIC_ClearPendingIRQ(CapSense_interrupt_config.intrSrc);
             NVIC_EnableIRQ(CapSense_interrupt_config.intrSrc);
@@ -217,9 +215,9 @@ static void capsense_isr(void)
 *  EZI2C initiliazition status
 *
  *******************************************************************************/
-static cy_status initialize_ezi2c(void)
+static cy_en_scb_ezi2c_status_t initialize_ezi2c(void)
 {
-    cy_status status = CYRET_SUCCESS;
+    cy_en_scb_ezi2c_status_t status = CY_SCB_EZI2C_SUCCESS;
     
     /* EZI2C interrupt configuration */
     const cy_stc_sysint_t ezi2c_intr_config =
@@ -231,13 +229,10 @@ static cy_status initialize_ezi2c(void)
     /* Capture the SCB EZI2C HW block and initialize it to the default state. */
     status = Cy_SCB_EZI2C_Init(CYBSP_EZI2C_HW, &CYBSP_EZI2C_config, &CYBSP_EZI2C_context);
     
-    if (CYRET_SUCCESS == status)
-    {
-
+    if (CY_SCB_EZI2C_SUCCESS == status)
+    {   
         /* Initialize EZI2C interrupt */
-        status = Cy_SysInt_Init(&ezi2c_intr_config, ezi2c_isr);
-        
-        if (CYRET_SUCCESS == status)
+        if (CY_SYSINT_SUCCESS == Cy_SysInt_Init(&ezi2c_intr_config, ezi2c_isr))
         {
             NVIC_ClearPendingIRQ(ezi2c_intr_config.intrSrc);
             NVIC_EnableIRQ(ezi2c_intr_config.intrSrc);
@@ -245,7 +240,7 @@ static cy_status initialize_ezi2c(void)
             /*Set up communication and initialize data buffer to CapSense data structure
             * to use Tuner application.
             */
-            Cy_SCB_EZI2C_SetBuffer1(CYBSP_EZI2C_HW, (uint8 *) &cy_capsense_tuner,
+            Cy_SCB_EZI2C_SetBuffer1(CYBSP_EZI2C_HW, (uint8_t *) &cy_capsense_tuner,
                                     sizeof(cy_capsense_tuner), sizeof(cy_capsense_tuner),
                                     &CYBSP_EZI2C_context);
 
