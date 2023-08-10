@@ -8,7 +8,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2022, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2023, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -48,6 +48,7 @@
 #include "cycfg.h"
 #include "cycfg_capsense.h"
 
+
 /*******************************************************************************
 * Macros
 *******************************************************************************/
@@ -58,6 +59,7 @@
 #define EZI2C_INTR_PRIORITY         (2u)
 #define CAPSENSE_INTR_PRIORITY      (3u)
 #define NUMBER_OF_SLIDER_SEGMENTS   (6u)
+
 
 /*******************************************************************************
 * Function Prototypes
@@ -70,6 +72,7 @@ static void ezi2c_isr(void);
 #if CY_CAPSENSE_BIST_EN
 static void measure_cp(void);
 #endif
+
 
 /*******************************************************************************
 * Global Definitions
